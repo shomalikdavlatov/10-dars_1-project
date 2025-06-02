@@ -24,7 +24,7 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      DATABASE_URL: "postgresql://postgres:1996@postgres:5432/todolist?schema=public"
+      DATABASE_URL: "postgresql://postgres:1996@postgres:5432/1-project?schema=public"
     env_file: 
       - .env
     
