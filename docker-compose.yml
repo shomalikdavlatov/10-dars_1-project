@@ -1,0 +1,30 @@
+services: 
+  postgres:
+    image: postgres:17.5
+    environment: 
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    env_file: 
+      - .env
+    ports: 
+      - "5433:5432"
+    healthcheck:
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER}"]
+  node:
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "postgresql://postgres:1996@postgres:5432/todolist?schema=public"
+    env_file: 
+      - .env
+    
